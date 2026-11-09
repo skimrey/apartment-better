@@ -56,9 +56,16 @@ def main() -> None:
     if a.cmd == "describe":
         from apartment_better import vision
         node = next(n for n in cfg["vision_nodes"] if n.get("enabled"))
-        d = vision.describe(node, vision.prep(open(a.path, "rb").read(), cfg.get("image_max_px", 768)), node.get("timeout", 600))
+        from apartment_better import character
+        jpeg = vision.prep(open(a.path, "rb").read(), cfg.get("image_max_px", 768))
+        d = vision.describe(node, jpeg, node.get("timeout", 600))
         for k in ("room", "features", "outdoor_space", "light", "view", "elevation", "notes"):
             print("%-15s%s" % (k + ":", ", ".join(d[k]) if isinstance(d[k], list) else d[k]))
+        b = character.describe(node, [jpeg], node.get("timeout", 600))
+        print()
+        for k in ("building_type", "era", "porch", "porch_level", "character", "notes"):
+            v = b.get(k)
+            print("%-15s%s" % (k + ":", ", ".join(map(str, v)) if isinstance(v, list) else v))
     elif a.cmd == "character":
         from apartment_better import character
         character.run(cfg, db, a.only, a.redo_unknown, a.limit)
