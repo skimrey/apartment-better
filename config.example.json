@@ -1,0 +1,108 @@
+{
+  "city": "Chicago",
+  "zillow_city_slug": "chicago-il",
+  "price": {
+    "min": 1700,
+    "max": 2100
+  },
+  "area": {
+    "west": -87.735,
+    "east": -87.62,
+    "south": 41.91,
+    "north": 42.02
+  },
+  "apartments_neighborhoods": [
+    "logan-square",
+    "hermosa",
+    "avondale",
+    "bucktown",
+    "lakeview",
+    "lincoln-park",
+    "roscoe-village",
+    "north-center",
+    "wrigleyville",
+    "ravenswood",
+    "lincoln-square",
+    "uptown",
+    "edgewater",
+    "rogers-park",
+    "old-town",
+    "irving-park"
+  ],
+  "chrome": {
+    "port": 9333,
+    "path": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    "profile": ".chrome-profile"
+  },
+  "delay_seconds": {
+    "min": 3.0,
+    "max": 7.0
+  },
+  "max_pages_per_search": 25,
+  "image_max_px": 768,
+  "vision_nodes": [
+    {
+      "name": "local",
+      "enabled": true,
+      "url": "http://127.0.0.1:11434",
+      "model": "gemma4:26b-a4b-it-mtp-q4_K_M",
+      "workers": 1,
+      "timeout": 600
+    }
+  ],
+  "query_expander": {
+    "url": "http://127.0.0.1:11434",
+    "model": "gemma4:e4b"
+  },
+  "apartments_city_slug": "chicago-il",
+  "expand": {
+    "area": {
+      "west": -87.95,
+      "east": -87.52,
+      "south": 41.64,
+      "north": 42.03
+    },
+    "price": {
+      "min": 1,
+      "max": 99999
+    },
+    "apartments_price_bands": [
+      [
+        1,
+        1000
+      ],
+      [
+        1000,
+        1300
+      ],
+      [
+        1300,
+        1500
+      ],
+      [
+        1500,
+        1700
+      ],
+      [
+        2100,
+        2300
+      ],
+      [
+        2300,
+        2600
+      ],
+      [
+        2600,
+        3000
+      ],
+      [
+        3000,
+        4000
+      ],
+      [
+        4000,
+        99999
+      ]
+    ]
+  }
+}

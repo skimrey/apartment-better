@@ -1,0 +1,5 @@
+httpx
+playwright
+pillow
+beautifulsoup4
+lxml
