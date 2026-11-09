@@ -37,6 +37,8 @@ def main() -> None:
     cp.add_argument("--only", help="just this source (zillow or apartments)")
     cp.add_argument("--redo-unknown", action="store_true", help="retry buildings judged 'not visible' (better photos may be known now)")
     cp.add_argument("--limit", type=int)
+    dp = sub.add_parser("describe", help="describe one photo file with the vision model")
+    dp.add_argument("path")
     sub.add_parser("picks", help="write data/picks.html and data/picks.md: vintage, private porch, not ground floor")
     sub.add_parser("status")
     sub.add_parser("stop")
@@ -51,7 +53,13 @@ def main() -> None:
         return
     if os.path.exists(pipeline.STOP_FILE) and a.cmd in ("discover", "details", "classify", "run", "character"):
         os.remove(pipeline.STOP_FILE)
-    if a.cmd == "character":
+    if a.cmd == "describe":
+        from apartment_better import vision
+        node = next(n for n in cfg["vision_nodes"] if n.get("enabled"))
+        d = vision.describe(node, vision.prep(open(a.path, "rb").read(), cfg.get("image_max_px", 768)), node.get("timeout", 600))
+        for k in ("room", "features", "outdoor_space", "light", "view", "elevation", "notes"):
+            print("%-15s%s" % (k + ":", ", ".join(d[k]) if isinstance(d[k], list) else d[k]))
+    elif a.cmd == "character":
         from apartment_better import character
         character.run(cfg, db, a.only, a.redo_unknown, a.limit)
     elif a.cmd == "picks":
