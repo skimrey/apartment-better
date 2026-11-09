@@ -104,5 +104,13 @@
         99999
       ]
     ]
+  },
+  "apartments_delay_seconds": {
+    "min": 75,
+    "max": 120
+  },
+  "apartments_image_delay_seconds": {
+    "min": 1.5,
+    "max": 3.0
   }
 }

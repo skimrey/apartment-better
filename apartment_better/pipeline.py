@@ -129,7 +129,7 @@ def details(cfg: dict, db: DB, limit: Optional[int] = None, source: Optional[str
                 log("details %d/%d %s: %d photos" % (i + 1, len(rows), r["id"], len(photos)))
             except Exception as e:
                 log("details %s failed: %s" % (r["id"], e))
-            polite(cfg)
+            polite(cfg if r["source"] == "zillow" else {"delay_seconds": cfg.get("apartments_delay_seconds", cfg["delay_seconds"])})
     finally:
         if br:
             br.close()
@@ -258,6 +258,8 @@ def classify(cfg: dict, db: DB, limit_listings: Optional[int] = None, limit_imag
                         if lst["source"] != "zillow" and br is None:
                             from .browser import Browser
                             br = Browser(cfg)
+                        if lst["source"] != "zillow":
+                            polite({"delay_seconds": cfg.get("apartments_image_delay_seconds", {"min": 1.5, "max": 3.0})})
                         raw = _fetch_image(cfg, zc, br, lst["source"], im["url"])
                         if not raw:
                             raise RuntimeError("download failed")
