@@ -31,7 +31,7 @@ In `config.json` set your city (`city`, `zillow_city_slug`, `apartments_city_slu
 .venv/bin/python cli.py discover|details|classify [--only zillow|apartments] [--limit N] [--images N] [--expand]
 .venv/bin/python cli.py character           # judge each building from its front photo (type, era, porches, level)
 .venv/bin/python cli.py floors              # infer floors from unit labels ("2F", "Unit 3A", "#304" -> 3)
-.venv/bin/python cli.py describe photo.jpg  # what the model sees in one photo
+.venv/bin/python cli.py describe photo.jpg [--detailed]  # what the model sees in one photo
 .venv/bin/python cli.py picks               # writes data/picks.html (with photos) and data/picks.md
 .venv/bin/python cli.py search "hardwood, lots of windows" [--home-only] [--max-price 2100] [--min-nice 7] [--floor 2]
 .venv/bin/python cli.py web                 # http://127.0.0.1:8765

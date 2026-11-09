@@ -39,6 +39,7 @@ def main() -> None:
     cp.add_argument("--limit", type=int)
     dp = sub.add_parser("describe", help="describe one photo file with the vision model")
     dp.add_argument("path")
+    dp.add_argument("--detailed", action="store_true", help="full inventory: building, outdoor spaces, objects, surroundings, tags")
     sub.add_parser("picks", help="write data/picks.html and data/picks.md: vintage, private porch, not ground floor")
     sub.add_parser("status")
     sub.add_parser("stop")
@@ -58,6 +59,13 @@ def main() -> None:
         node = next(n for n in cfg["vision_nodes"] if n.get("enabled"))
         from apartment_better import character
         jpeg = vision.prep(open(a.path, "rb").read(), cfg.get("image_max_px", 768))
+        if a.detailed:
+            d = vision.describe_detailed(node, jpeg, node.get("timeout", 600))
+            for k, v in d.items():
+                print(k.replace("_", " ") + ":")
+                for x in (v if isinstance(v, list) else [v]):
+                    print("  - " + str(x))
+            return
         d = vision.describe(node, jpeg, node.get("timeout", 600))
         for k in ("room", "features", "outdoor_space", "light", "view", "elevation", "notes"):
             print("%-15s%s" % (k + ":", ", ".join(d[k]) if isinstance(d[k], list) else d[k]))

@@ -24,6 +24,25 @@ Describe only what you can actually see. Reply with JSON only, with exactly thes
  "notes": one short factual sentence including condition (new, dated, worn) and anything unusual}"""
 
 
+DETAIL_PROMPT = """You are cataloguing a rental listing photo for renters. List everything a renter could search for that you can actually see.
+Be specific (counts, levels, materials, colors). Do not repeat yourself across keys. Reply with JSON only, with exactly these keys:
+{"building": [short phrases: type, era, stories, cladding, roof, notable details],
+ "outdoor_spaces": [one phrase per space: what it is, which level, material, what is on it],
+ "furniture_and_objects": [short phrases],
+ "surroundings": [short phrases: neighbors, alley or street, parking, trees, utilities],
+ "renter_takeaways": [3-5 short phrases: what living here would be like],
+ "search_tags": [8-15 lowercase tags this photo should match]}"""
+
+
+def describe_detailed(node: Dict[str, Any], jpeg: bytes, timeout: int = 600) -> Dict[str, Any]:
+    body = {"model": node["model"], "stream": False, "think": False, "format": "json", "keep_alive": "60m",
+            "options": {"temperature": 0, "num_predict": 900},
+            "messages": [{"role": "user", "content": DETAIL_PROMPT, "images": [base64.b64encode(jpeg).decode()]}]}
+    r = httpx.post(node["url"].rstrip("/") + "/api/chat", json=body, timeout=timeout)
+    r.raise_for_status()
+    return _parse(r.json()["message"]["content"])
+
+
 def prep(data: bytes, max_px: int) -> bytes:
     im = Image.open(io.BytesIO(data))
     im = im.convert("RGB")
